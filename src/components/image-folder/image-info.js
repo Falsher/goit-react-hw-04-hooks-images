@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-// import LoadButton from './loadButton';
+
 export default class ImageInfo extends Component {
   state = {
     image: null,
@@ -36,9 +36,7 @@ export default class ImageInfo extends Component {
         {image && (
           <ul className="ImageGallery">
             {image.hits.map(hit => (
-              <li className="ImageGalleryItem">
-                {' '}
-                key={hit.id}
+              <li className="ImageGalleryItem" key="hit.id">
                 <img
                   alt={hit.user}
                   src={hit.userImageURL}
