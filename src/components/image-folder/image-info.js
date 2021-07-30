@@ -1,13 +1,18 @@
 import React, { Component } from 'react';
-
+import Modal from './modal';
+import Gallery from './gallery';
 export default class ImageInfo extends Component {
   state = {
     image: null,
     loading: false,
     error: null,
     page: 1,
+    showModal: false,
   };
-
+  modalData = {
+    src: '',
+    alt: '',
+  };
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.imageName !== this.props.imageName) {
       this.setState({ loading: true });
@@ -20,36 +25,56 @@ export default class ImageInfo extends Component {
         .finally(() => this.setState({ loading: false }));
     }
   }
+  toggleModal = () => {
+    this.setState(state => ({ showModal: !state.showModal }));
+  };
   hendlePageUp = () => {
-    this.setState({ page: this.state.page + 1 });
+    this.setState(state => ({ page: state.page + 1 }));
     console.log(this.state.page);
+  };
+  openModal = (src, alt) => {
+    this.modalData.src = src;
+    this.modalData.alt = alt;
+    this.toggleModal();
   };
   render() {
     const { loading, image, error } = this.state;
 
     return (
-      <div>
+      <section>
         <h1>ImageInfo </h1>
         {error && <h1>Картинки {this.props.imageName} нет</h1>}
         {loading && <div>loading...</div>}
         {!this.props.imageName && <div>Введите название картинки</div>}
         {image && (
           <ul className="ImageGallery">
-            {image.hits.map(hit => (
-              <li className="ImageGalleryItem" key="hit.id">
-                <img
-                  alt={hit.user}
-                  src={hit.userImageURL}
-                  className="ImageGalleryItem-image"
-                />
-              </li>
-            ))}
+            {image.hits.map(hit => {
+              return (
+                <li className="ImageGalleryItem" key={hit.id}>
+                  <Gallery
+                    alt={hit.user}
+                    src={hit.previewURL}
+                    largeImageUrl={hit.largeImageURL}
+                    openModal={this.openModal}
+                  />
+                </li>
+              );
+            })}
             <button className="loadBtn" onClick={this.hendlePageUp}>
               Load more
             </button>
+            <div>
+              {this.state.showModal && (
+                <Modal
+                  closeModal={this.toggleModal}
+                  href={this.modalData.src}
+                  alt={this.modalData.alt}
+                />
+              )}
+            </div>
           </ul>
         )}
-      </div>
+      </section>
     );
   }
 }

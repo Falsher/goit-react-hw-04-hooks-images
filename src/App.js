@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 
 import { ToastContainer } from 'react-toastify';
-// import LoadButton from './components/image-folder/loadButton';
+
 import 'react-toastify/dist/ReactToastify.css';
 import ImageInfo from './components/image-folder/image-info';
 import InputImage from './components/image-folder/image-input';
@@ -34,13 +34,6 @@ class App extends Component {
         </header>
 
         <ImageInfo imageName={this.state.imageName} />
-        {/* {this.state.imageName.length !== 0 && (
-          <LoadButton
-            onSubmit={this.loadSubmit}
-            length={this.state.imageName.length}
-            imageName={this.state.imageName}
-          />
-        )} */}
       </div>
     );
   }
