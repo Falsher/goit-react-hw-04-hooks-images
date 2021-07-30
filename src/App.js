@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
+import './components/image-folder/css/header.css';
 import ImageInfo from './components/image-folder/image-info';
 import InputImage from './components/image-folder/image-input';
 

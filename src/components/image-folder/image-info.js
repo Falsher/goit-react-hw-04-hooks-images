@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Modal from './modal';
 import Gallery from './gallery';
+import './css/gallery.css';
 export default class ImageInfo extends Component {
   state = {
     image: null,
@@ -47,32 +48,36 @@ export default class ImageInfo extends Component {
         {loading && <div>loading...</div>}
         {!this.props.imageName && <div>Введите название картинки</div>}
         {image && (
-          <ul className="ImageGallery">
-            {image.hits.map(hit => {
-              return (
-                <li className="ImageGalleryItem" key={hit.id}>
-                  <Gallery
-                    alt={hit.user}
-                    src={hit.previewURL}
-                    largeImageUrl={hit.largeImageURL}
-                    openModal={this.openModal}
+          <div>
+            <ul className="ImageGallery">
+              {image.hits.map(hit => {
+                return (
+                  <li className="ImageGalleryItem" key={hit.id}>
+                    <Gallery
+                      alt={hit.user}
+                      src={hit.previewURL}
+                      largeImageUrl={hit.largeImageURL}
+                      openModal={this.openModal}
+                    />
+                  </li>
+                );
+              })}
+
+              <div>
+                {this.state.showModal && (
+                  <Modal
+                    closeModal={this.toggleModal}
+                    href={this.modalData.src}
+                    alt={this.modalData.alt}
                   />
-                </li>
-              );
-            })}
+                )}
+              </div>
+            </ul>
+
             <button className="loadBtn" onClick={this.hendlePageUp}>
               Load more
             </button>
-            <div>
-              {this.state.showModal && (
-                <Modal
-                  closeModal={this.toggleModal}
-                  href={this.modalData.src}
-                  alt={this.modalData.alt}
-                />
-              )}
-            </div>
-          </ul>
+          </div>
         )}
       </section>
     );

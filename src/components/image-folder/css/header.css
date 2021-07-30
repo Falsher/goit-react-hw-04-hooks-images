@@ -1,0 +1,10 @@
+.Searchbar {
+  width: 100%;
+  height: 50px;
+  background-color: blue;
+  text-align: center;
+}
+.Searchbar button {
+  width: 100px;
+  margin-top: 15px;
+}
