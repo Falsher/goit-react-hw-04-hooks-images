@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import ApiImage from './api';
+// import LoadButton from './loadButton';
 export default class ImageInfo extends Component {
   state = {
     image: null,
@@ -8,16 +8,18 @@ export default class ImageInfo extends Component {
     page: 1,
   };
 
-  fetchImages = () => {
-    this.setState({ loading: true });
-
-    ApiImage(this.props.searchQuery, this.state.pageNumber)
-      .then(response => response.json())
-      .then(image => this.setState({ image }))
-      .catch(error => this.setState({ error }))
-      .finally(() => this.setState({ loading: false }));
-  };
-
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps.imageName !== this.props.imageName) {
+      this.setState({ loading: true });
+      fetch(
+        `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.props.imageName}&page=${this.state.page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
+      )
+        .then(response => response.json())
+        .then(image => this.setState({ image }))
+        .catch(error => this.setState({ error }))
+        .finally(() => this.setState({ loading: false }));
+    }
+  }
   hendlePageUp = () => {
     this.setState({ page: this.state.page + 1 });
     console.log(this.state.page);
@@ -34,7 +36,9 @@ export default class ImageInfo extends Component {
         {image && (
           <ul className="ImageGallery">
             {image.hits.map(hit => (
-              <li className="ImageGalleryItem" key={hit.id}>
+              <li className="ImageGalleryItem">
+                {' '}
+                key={hit.id}
                 <img
                   alt={hit.user}
                   src={hit.userImageURL}
