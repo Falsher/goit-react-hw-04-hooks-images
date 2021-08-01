@@ -4,7 +4,7 @@ import Gallery from './gallery';
 import './css/gallery.css';
 export default class ImageInfo extends Component {
   state = {
-    image: null,
+    image: [],
     loading: false,
     error: null,
     page: 1,
@@ -22,19 +22,18 @@ export default class ImageInfo extends Component {
         `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.props.imageName}&page=${this.state.page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
       )
         .then(response => response.json())
-        .then(image => this.setState({ image }))
+        .then(image => this.setState({ image: image.hits }))
         .catch(error => this.setState({ error }))
         .finally(() => this.setState({ loading: false }));
     }
   }
 
-  // fecthComments = () => apiService(this.state.activePage);
   toggleModal = () => {
     this.setState(state => ({ showModal: !state.showModal }));
   };
   hendlePageUp = () => {
     console.log('hello');
-    // this.setState({ page: this.state.page + 1 });
+
     this.setState(
       ({ page }) => ({
         page: page + 1,
@@ -44,7 +43,14 @@ export default class ImageInfo extends Component {
           `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.props.imageName}&page=${this.state.page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
         )
           .then(response => response.json())
-          .then(image => this.setState({ image }))
+          .then(image =>
+            this.setState(prevState => {
+              console.log(prevState.image, image.hits);
+              return {
+                image: [...prevState.image, ...image.hits],
+              };
+            }),
+          )
           .catch(error => this.setState({ error }))
           .finally(() => this.setState({ loading: false }));
       },
@@ -57,17 +63,17 @@ export default class ImageInfo extends Component {
   };
   render() {
     const { loading, image, error } = this.state;
-
+    console.log(image);
     return (
       <section>
         <h1>ImageInfo </h1>
         {error && <h1>Картинки {this.props.imageName} нет</h1>}
         {loading && <div>loading...</div>}
         {!this.props.imageName && <div>Введите название картинки</div>}
-        {image && (
+        {image.length && (
           <div>
             <ul className="ImageGallery">
-              {image.hits.map(hit => {
+              {image.map(hit => {
                 return (
                   <li className="ImageGalleryItem" key={hit.id}>
                     <Gallery

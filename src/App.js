@@ -9,7 +9,7 @@ import InputImage from './components/image-folder/image-input';
 
 class App extends Component {
   state = {
-    imageName: [],
+    imageName: '',
   };
   formSubmit = imageName => {
     this.setState({ imageName });
