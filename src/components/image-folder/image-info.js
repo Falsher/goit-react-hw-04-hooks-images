@@ -17,6 +17,7 @@ export default class ImageInfo extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.imageName !== this.props.imageName) {
       this.setState({ loading: true });
+      this.setState({ page: 1 });
       fetch(
         `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.props.imageName}&page=${this.state.page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
       )
@@ -26,12 +27,28 @@ export default class ImageInfo extends Component {
         .finally(() => this.setState({ loading: false }));
     }
   }
+
+  // fecthComments = () => apiService(this.state.activePage);
   toggleModal = () => {
     this.setState(state => ({ showModal: !state.showModal }));
   };
   hendlePageUp = () => {
-    this.setState(state => ({ page: state.page + 1 }));
-    console.log(this.state.page);
+    console.log('hello');
+    // this.setState({ page: this.state.page + 1 });
+    this.setState(
+      ({ page }) => ({
+        page: page + 1,
+      }),
+      () => {
+        fetch(
+          `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${this.props.imageName}&page=${this.state.page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
+        )
+          .then(response => response.json())
+          .then(image => this.setState({ image }))
+          .catch(error => this.setState({ error }))
+          .finally(() => this.setState({ loading: false }));
+      },
+    );
   };
   openModal = (src, alt) => {
     this.modalData.src = src;
@@ -72,11 +89,14 @@ export default class ImageInfo extends Component {
                   />
                 )}
               </div>
+              <button
+                type="button"
+                className="loadBtn"
+                onClick={this.hendlePageUp}
+              >
+                Load more
+              </button>
             </ul>
-
-            <button className="loadBtn" onClick={this.hendlePageUp}>
-              Load more
-            </button>
           </div>
         )}
       </section>
