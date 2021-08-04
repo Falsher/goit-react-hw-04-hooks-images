@@ -8,34 +8,20 @@ export default function ImageInfo({ imageName }) {
   const [error, setError] = useState(null);
   const [page, setPage] = useState(1);
   const [showModal, setShowModal] = useState(false);
-  const modalData = {
-    src: '',
-    alt: '',
-  };
+  const [src, setSrc] = useState('');
+  const [alt, setAlt] = useState('');
 
-  useEffect(() => {
-    if (imageName !== '') {
-      setLoading(true);
-
-      fetch(
-        `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${imageName}&page=${page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
-      )
-        .then(response => response.json())
-        .then(image => setImage(image.hits))
-        .catch(error => setError)
-        .finally(() => setLoading(false));
-    }
-  }, [imageName, page]);
   const toggleModal = () => {
     setShowModal(!showModal);
   };
   useEffect(() => {
-    if (page > 1) {
+    if (imageName !== '') {
+      setLoading(true);
       fetch(
         `https://pixabay.com/api/?image_type=photo&orientation=horizontal&q=${imageName}&page=${page}&per_page=12&key=21857111-8554c096d1798b5dae4546d72`,
       )
         .then(response => response.json())
-        .then(setImage => setImage(prevImage => [...prevImage, ...image.hits]))
+        .then(image => setImage(prevImage => [...prevImage, ...image.hits]))
         .catch(error => setError)
         .finally(() => setLoading(false));
     }
@@ -44,8 +30,8 @@ export default function ImageInfo({ imageName }) {
     setPage(page + 1);
   };
   const openModal = (src, alt) => {
-    modalData(src);
-    modalData(alt);
+    setSrc(src);
+    setAlt(alt);
     toggleModal();
   };
 
@@ -73,11 +59,7 @@ export default function ImageInfo({ imageName }) {
 
             <div>
               {showModal && (
-                <Modal
-                  closeModal={toggleModal}
-                  href={modalData.src}
-                  alt={modalData.alt}
-                />
+                <Modal closeModal={toggleModal} href={src} alt={alt} />
               )}
             </div>
             <button type="button" className="loadBtn" onClick={hendlePageUp}>
