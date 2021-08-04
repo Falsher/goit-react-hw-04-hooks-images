@@ -22,7 +22,7 @@ export default function ImageInfo({ imageName }) {
       )
         .then(response => response.json())
         .then(image => setImage(prevImage => [...prevImage, ...image.hits]))
-        .catch(error => setError)
+        .catch(error => setError(error))
         .finally(() => setLoading(false));
     }
   }, [image.hits, imageName, page]);
