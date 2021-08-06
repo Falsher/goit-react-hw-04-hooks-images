@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-const LoadButton = ({ length, onSubmit }) => {
+function LoadButton({ length, onSubmit }) {
   [length] = useState(1);
 
   useEffect(() => {
@@ -16,5 +16,5 @@ const LoadButton = ({ length, onSubmit }) => {
       Load more
     </button>
   );
-};
+}
 export default LoadButton;

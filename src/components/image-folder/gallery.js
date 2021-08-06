@@ -1,23 +1,21 @@
-import { Component } from 'react';
+import React from 'react';
 
-class ImageGalleryItem extends Component {
-  handleClick = event => {
-    this.props.openModal(event.target.dataset.largeimage, this.props.alt);
+function ImageGalleryItem({ largeImageUrl, openModal, alt, src }) {
+  const handleClick = event => {
+    openModal(event.target.dataset.largeimage, alt);
   };
 
-  render() {
-    return (
-      <>
-        <img
-          src={this.props.src}
-          alt={this.props.alt}
-          className="ImageGalleryItem-image"
-          data-largeimage={this.props.largeImageUrl}
-          onClick={this.handleClick}
-        />
-      </>
-    );
-  }
+  return (
+    <>
+      <img
+        src={src}
+        alt={alt}
+        className="ImageGalleryItem-image"
+        data-largeimage={largeImageUrl}
+        onClick={handleClick}
+      />
+    </>
+  );
 }
 
 export default ImageGalleryItem;
